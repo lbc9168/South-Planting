@@ -1,0 +1,6 @@
+
+*.dta
+Data/R/.RData
+Data/R/.Rhistory
+Data/Crop_return_SE.xlsx
+Data/Crop_return_SE.csv
