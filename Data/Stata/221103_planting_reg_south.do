@@ -7,7 +7,9 @@
 **********************************************
 
 ** Datasets:
-** 220404: estimate planting using tree 5 <= STDAGE <= 25
+** 220308: estimate planting using trees STDAGE <= 50
+** 220404: estimate planting using trees 5 <= STDAGE <= 25
+** 221103: added updated crop return data
 
 
 ***********************************
@@ -20,19 +22,19 @@
 ** no harvest, no price change
 rreg plantAcre time_stage#c.pnw_price_ton time_stage#c.tms_price pnw_price_ton tms_price/*
 */ annual_ppt annual_tmean ppt_sq temp_sq oil_real_price annual_int_rate housing_units ag_area pasture_area landArea /*
-*/ Revenue_CORN Revenue_SOYBEANS i.time_stage i.fips if year < 2008 & year > 1977
+*/ corn_GrossReturn Soybean_GrossReturn i.time_stage i.fips if year < 2008 & year > 1977
 
 ** no harvest, with price change
 rreg plantAcre time_stage#c.pnw_price_ton time_stage#c.tms_price pnw_price_ton tms_price/*
 */ pctchnge_tms /*
 */ annual_ppt annual_tmean ppt_sq temp_sq oil_real_price annual_int_rate housing_units ag_area pasture_area landArea /*
-*/ Revenue_CORN Revenue_SOYBEANS i.time_stage i.fips if year < 2008 & year > 1977
+*/ corn_GrossReturn Soybean_GrossReturn i.time_stage i.fips if year < 2008 & year > 1977
 
 ** with est_harvest and logging wage
 rreg plantAcre time_stage#c.pnw_price_ton time_stage#c.tms_price pnw_price_ton tms_price/*
 */ pctchnge_tms est_harvest adj_logging_wage/*
 */ annual_ppt annual_tmean ppt_sq temp_sq oil_real_price annual_int_rate housing_units ag_area pasture_area landArea /*
-*/ Revenue_CORN Revenue_SOYBEANS i.time_stage i.fips if year < 2008 & year > 1977
+*/ corn_GrossReturn Soybean_GrossReturn i.time_stage i.fips if year < 2008 & year > 1977
 
 
 
@@ -70,7 +72,29 @@ esttab using"table2.tex", replace ///
  cells("b(fmt(3) star label(Coef.))") ///
  nomtitle label star(* 0.10 ** 0.05 *** 0.01)
  
+
  
+ 
+**** Direct regressions (robustness check) 
+** no harvest, no price change
+rreg plantAcre time_stage#c.pnw_price_ton time_stage#c.tms_price pnw_price_ton tms_price/*
+*/ annual_ppt annual_tmean ppt_sq temp_sq oil_real_price annual_int_rate housing_units ag_area pasture_area landArea /*
+*/ Revenue_CORN Revenue_SOYBEANS i.time_stage i.fips if year < 1996 & year > 1982
+
+
+** no harvest, with price change
+rreg plantAcre time_stage#c.pnw_price_ton time_stage#c.tms_price pnw_price_ton tms_price/*
+*/ pctchnge_tms /*
+*/ annual_ppt annual_tmean ppt_sq temp_sq oil_real_price annual_int_rate housing_units ag_area pasture_area landArea /*
+*/ Revenue_CORN Revenue_SOYBEANS i.time_stage i.fips if year < 1996 & year > 1982
+
+
+** with est_harvest and logging wage
+rreg plantAcre time_stage#c.pnw_price_ton time_stage#c.tms_price pnw_price_ton tms_price/*
+*/ pctchnge_tms est_harvest adj_logging_wage/*
+*/ annual_ppt annual_tmean ppt_sq temp_sq oil_real_price annual_int_rate housing_units ag_area pasture_area landArea /*
+*/ Revenue_CORN Revenue_SOYBEANS i.time_stage i.fips if year < 1996 & year > 1982
+
 **** export robustness check results to latex form
 
 est clear
